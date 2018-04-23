@@ -10,5 +10,9 @@
     <h3> 1.4  mmm----编译指定路径的全部文件，不包括它们的依赖文件（mmm packages/apps/Dialer/），用Tab键可以补全路径名称。</h3>
     <h3> 例子 mmm -B packages/apps/Dialer/ 单独编译某个模块mmm packages/apps/Dialer:Dialer</h3>
     <h3> 1.5  hmm ----print the usage of the envsetup supply fuction </h3> 
+<h1>笔记一 Android OTA 升级</h1>  
+  <h2>1 OTA 升级是 Android 系统提供的标准软件升级方式。 它功能强大,提供了全量升级和增量升级模式,可以通过SD卡或U盘升级,也可以通过网络升级。这里,我们先研究最简单的情况,通过SD卡进行完全升级。</h2>
+  <h2>2 编译OTA全量升级包1) 首先编译出android2) make otapackage即可获得:out/target/product/{product_name}/ {product_name}-ota-eng.{uid}.zip </h2>
+  <h2>3 将该文件改名为update.zip放到SD卡根目录, 即可开始recovery模式下的OTA升级。</h2>
 </body>
 </html>
