@@ -1,18 +1,677 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="referrer" content="same-origin" />
+<title>深入浅出 - Android系统移植与平台开发（十一）- Android系统的定制【转】 - 博客园</title>
+<link type="text/css" rel="stylesheet" href="/bundles/blog-common.css?v=-hy83QNg62d4qYibixJzxMJkbf1P9fTBlqv7SK5zVL01"/>
+<link id="MainCss" type="text/css" rel="stylesheet" href="/skins/LessIsMore/bundle-LessIsMore.css?v=K-SPbyFTmacJSNw1O1LzZFcIaS56dT8uEKlXYOxLR9k1"/>
+<link type="text/css" rel="stylesheet" href="/blog/customcss/280408.css?v=%2fnAPAWuEMTqJ5I6C6qDk2zCNPoQ%3d"/>
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/LessIsMore/bundle-LessIsMore-mobile.css?v=d9LctKHRIQp9rreugMcQ1-UJuq_j1fo0GZXTXj8Bqrk1"/>
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/zzb-Dream-90Time/rss"/>
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/zzb-Dream-90Time/rsd.xml"/>
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/zzb-Dream-90Time/wlwmanifest.xml"/>
+<script src="//common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">var currentBlogApp = 'zzb-Dream-90Time', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="/bundles/blog-common.js?v=d16NGD79qD3qnJt25hXDZ2sGoojamz2W5Rl4vT0CGVg1" type="text/javascript"></script>
+</head>
 <body>
-<h1>笔记一 Android compile command</h1>
-  <h2>  1. setup environment and supply function ./build/envsetup.sh</h2>
-    <h3> 1.1  lunch----lunch menu and lunch the board</h3>
-    <h3> 1.2  m----在当前代码树的顶层路径执行make命令，不管哪层路径都可以执行此命令</h3>
-    <h3> 1.3  mm----在当前路径下执行make命令，当前路径如果是顶层，相当于全编，不包括它们的依赖文件</h3>
-    <h3> 如果使用mm方式编译，就会删除system.img、ramdisk.img、userdata.img等IMG镜像文件</h3>
-    <h3> 1.4  mmm----编译指定路径的全部文件，不包括它们的依赖文件（mmm packages/apps/Dialer/），用Tab键可以补全路径名称。</h3>
-    <h3> 例子 mmm -B packages/apps/Dialer/ 单独编译某个模块mmm packages/apps/Dialer:Dialer</h3>
-    <h3> 1.5  hmm ----print the usage of the envsetup supply fuction </h3> 
-<h1>笔记一 Android OTA 升级</h1>  
-  <h2>1 OTA 升级是 Android 系统提供的标准软件升级方式。 它功能强大,提供了全量升级和增量升级模式,可以通过SD卡或U盘升级,也可以通过网络升级。这里,我们先研究最简单的情况,通过SD卡进行完全升级。</h2>
-  <h2>2 编译OTA全量升级包1) 首先编译出android2) make otapackage即可获得:out/target/product/{product_name}/ {product_name}-ota-eng.{uid}.zip </h2>
-  <h2>3 将该文件改名为update.zip放到SD卡根目录, 即可开始recovery模式下的OTA升级。</h2>
+<a name="top"></a>
+
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+		
+<!--done-->
+<div class="title"><a id="Header1_HeaderTitle" class="headermaintitle" href="http://phu1975.github.io">学习博客</a></div>
+<div class="subtitle">转发的内容</div>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li id="nav_sitehome"><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+<li id="nav_myhome"><a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/zzb-Dream-90Time/">首页</a></li>
+<li id="nav_newpost"><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li id="nav_contact"><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/%E7%88%B1%E5%81%9A%E6%A2%A6%E7%9A%8490%E5%90%8E">联系</a></li>
+<li id="nav_rss"><a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/zzb-Dream-90Time/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="http://www.cnblogs.com/zzb-Dream-90Time/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li id="nav_admin"><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<!--done-->
+随笔-931&nbsp;
+文章-1&nbsp;
+评论-22&nbsp;
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class = "post">
+		<h1 class = "postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/zzb-Dream-90Time/p/7172167.html">深入浅出 - Android系统移植与平台开发（十一）- Android系统的定制【转】</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><p>本文转载自：</p>
+<h2><a name="_Toc31777" target="_blank"></a>4.3定制Android平台系统</h2>
+<p>通常产品厂商在拿到<a class="replace_word" title="Android知识库" href="http://lib.csdn.net/base/android" target="_blank">Android</a>源码后会在<a class="replace_word" title="Android知识库" href="http://lib.csdn.net/base/android" target="_blank">android</a>源码基础上进行定制修改，以匹配适应自己的产品，从本节开始，我们从最原始的Android源码系统里一步一步定制出自己的Android系统。本节主要内容包含：根据Android源码，添加新产品编译项，定制系统启动界面和文字，定制系统启动动画和声音，定制系统桌面。</p>
+<h3><a name="t1" target="_blank"></a><a name="_Toc29207" target="_blank"></a>4.3.1&nbsp;添加新产品编译项</h3>
+<p>Android系统的源代码是一个逻辑结构非常独立工程，在一套Android源码中可以编译出多个产品映像，在需要编译某一个产品系统时，只要通过lunch命令选择产品编译项即可。本节我们介绍如何在Android源码中创建新产品编译项并定制编译出该产品系统。</p>
+<p>在创建新产品编译项时，要先了解下面几个概念：</p>
+<p>&Oslash;&nbsp;目标产品：具体指某个最终用户买到的Android设备，如：iPhone5，乐PhoneS2，小米手机等。</p>
+<p>&Oslash;&nbsp;产品系列：开发手机的团队通常由同一团队打造，在研发出一款产品后，往往要继续在其基础上研发出新产品，新产品往往是在老产品的硬件或软件基础上做一些升级，这些产品们就是一个产品系列。比如：联想的乐Phone系列手机包含：乐PhoneS1和乐PhoneS2，他们同属于一个系列。</p>
+<p>&Oslash;&nbsp;目标设备：目标设备可以理解为手机主板，它是指手机设备硬件配置信息的集合体，每个手机产品都有设备硬件配置，一个设备硬件配置可能被不同产品使用，同一手机有高配置版本和低配置版本，如乐PhoneS2有512M RAM、8G Flash容量版本和1G RAM 、16G Flash容量版本。</p>
+<p>在Android编译系统中，每个编译项编译出一个产品系统，每个目标产品都对应一个目标设备，一个产品系列包含多个不同的产品，一个目标设备可能被多个产品配置使用。</p>
+<p>由前面描述可知，同一系列的新老产品之间可以存在&ldquo;继承关系&rdquo;，新产品是老产品的&ldquo;子产品&rdquo;，老产品是新产品的&ldquo;父产品&rdquo;，子产品可以复用父产品的特性，还可以重写、扩展父产品。如：老产品不支持NFC近距离通信技术，新产品支持NFC技术。同样，设备主板间也存在&ldquo;继承关系&rdquo;。</p>
+<p>&nbsp;<img src="http://img.blog.csdn.net/20140611215250687?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbXJfcmFwdG9y/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="" /></p>
+<p align="center">图x-x 产品、设备与编译项关系图</p>
+<p align="center">&nbsp;</p>
+<p>如图x-x所示，某一产品系列包含3个产品，2个目标设备，其中产品2继承了产品1，产品2 使用了设备2，它是基于产品1所使用的设备1的升级。产品3使用了和产品2一样的设备2，他们硬件配置一样，但是却不是同一产品，3个不同产品都对应一个产品编译项。</p>
+<p>在Android编译系统中，产品编译项相关配置文件都在device/&lt;厂商名&gt;/目录下。厂商的产品列表由AndroidProducts.mk文件定义，目标产品信息由&lt;产品名&gt;.mk定义，目标设备信息由BoardConfig.mk和AndroidBoard.mk定义。创建新产品的编译项就是创建上述几个mk文件的过程。</p>
+<p>1.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;创建厂商目录</p>
+<p>不同的手机厂商对应device/下不同目录，在厂商目录下放置该厂商的产品相关信息，我们厂商名定义为mycompany。</p>
+<div>
+<p>$ cd ~/android/android_source</p>
+<p>$ mkdir device/mycompany</p>
+</div>
+<p>2.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在厂商目录下创建设备目录</p>
+<p>定义设备名为myphone。</p>
+<div>
+<p>$ mkdir device/mycompany/myphone</p>
+</div>
+<p>3.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;添加新产品编译项配置文件，该配置文件在执行source build/envsetup.sh时，被加载执行</p>
+<div>
+<p>$ vim device/mycompany/myphone/vendorsetup.sh</p>
+</div>
+<p>在vendorsetup.sh文件时添加下面一条命令，用于向编译系统添加编译项，新添加的产品名为：myproduct，编译类型为eng。</p>
+<div>
+<p>add_lunch_combo myproduct-eng</p>
+</div>
+<p>注：add_lunch_combo命令是build/envsetup.sh脚本中定义的函数，表示将一个新产品编译项添加到lunch菜单里。</p>
+<p>4.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;创建产品列表配置文件AndroidProducts.mk</p>
+<p>AndroidProducts.mk文件用于定义当前厂商所拥有的所有产品列表，每个产品都对应一个配置文件：</p>
+<div>
+<p>$ vimdevice/mycompany/myphone/AndroidProducts.mk</p>
+</div>
+<p>在产品列表配置文件中添加如下内容：</p>
+<div>
+<p>PRODUCT_MAKEFILES := \</p>
+<p>&nbsp;&nbsp;&nbsp;$(LOCAL_DIR)/full_product.mk</p>
+</div>
+<p>注：PRODUCT_MAKEFILES变量用于保存所有产品配置信息列表，$(LOCAL_DIR)表示当前目录，full_product.mk表示某一款产品的配置文件。</p>
+<p>5.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;配置full_product.mk文件，定义产品的配置信息，添加如下内容：</p>
+<div>
+<p>include build/target/product/languages_full.mk</p>
+<p>include build/target/product/full.mk</p>
+<p>&nbsp;</p>
+<p># Discard inherited values and use our owninstead.</p>
+<p>PRODUCT_NAME := myproduct</p>
+<p>PRODUCT_DEVICE := myphone</p>
+</div>
+<p>产品配置也可以和<a class="replace_word" title="Java 知识库" href="http://lib.csdn.net/base/java" target="_blank">Java</a>中的类一样被继承，通过inclulde命令可以将指定的文件包含进来，然后在后面可以对里面的内容进行重写。一般而言不同的产品产品名和设备名都不一样，在full_product.mk中对继承的full.mk中的产品名和设备名进行重写：PRODUCT_NAME为myproduct，PRODUCT_DEVICE为myphone。</p>
+<p>在full_product.mk文件中继承的languages_full.mk内容如下：</p>
+<p>@build/target/product/languages_full.mk</p>
+<div>
+<p>PRODUCT_LOCALES := en_US fr_FR it_IT es_ES de_DEnl_NL cs_CZ pl_PL ja_JP zh_TW zh_CN ru_RU ko_KR nb_NO es_US da_DK el_GR tr_TRpt_PT pt_BR rm_CH sv_SE bg_BG ca_ES en_GB fi_FI hr_HR hu_HU in_ID iw_IL lt_LTlv_LV ro_RO sk_SK sl_SI sr_RS uk_UA vi_VN tl_PH</p>
+</div>
+<p>该配置文件里表示的是当前产品系统里默认支持的本地语言，由上述配置信息可知，它基本包含了Android所支持的所有语言包。</p>
+<p>@build/target/product/full.mk</p>
+<div>
+<p>PRODUCT_PACKAGES := \</p>
+<p>&nbsp;&nbsp;&nbsp;OpenWnn \</p>
+<p>&nbsp;&nbsp;&nbsp;PinyinIME \</p>
+<p>&nbsp;&nbsp;&nbsp; VoiceDialer\</p>
+<p>&nbsp;&nbsp;&nbsp;libWnnEngDic \</p>
+<p>&nbsp;&nbsp;&nbsp;libWnnJpnDic \</p>
+<p>&nbsp;&nbsp;&nbsp;libwnndict</p>
+<p>&nbsp;</p>
+<p># Additional settings used in all AOSP builds</p>
+<p>PRODUCT_PROPERTY_OVERRIDES := \</p>
+<p>&nbsp;&nbsp;&nbsp;keyguard.no_require_sim=true \</p>
+<p>&nbsp;&nbsp;&nbsp;ro.com.android.dateformat=MM-dd-yyyy \</p>
+<p>&nbsp;&nbsp;&nbsp;ro.com.android.dataroaming=true \</p>
+<p>&nbsp;&nbsp;&nbsp;ro.ril.hsxpa=1 \</p>
+<p>&nbsp;&nbsp;&nbsp;ro.ril.gprsclass=10</p>
+<p>&nbsp;</p>
+<p>PRODUCT_COPY_FILES := \</p>
+<p>&nbsp;&nbsp;&nbsp;development/data/etc/apns-conf.xml:system/etc/apns-conf.xml \</p>
+<p>&nbsp;&nbsp;&nbsp;development/data/etc/vold.conf:system/etc/vold.conf</p>
+<p>&nbsp;</p>
+<p># Pick up some sounds - stick with the shortlist to save space</p>
+<p># on smaller devices.</p>
+<p>$(call inherit-product,frameworks/base/data/sounds/OriginalAudio.mk)</p>
+<p>&nbsp;</p>
+<p># Get the TTS language packs</p>
+<p>$(call inherit-product-if-exists,external/svox/pico/lang/all_pico_languages.mk)</p>
+<p>&nbsp;</p>
+<p># Get a list of languages. We use the small listto save space</p>
+<p># on smaller devices.</p>
+<p>$(call inherit-product,build/target/product/languages_small.mk)</p>
+<p>&nbsp;</p>
+<p>$(call inherit-product,build/target/product/generic.mk)</p>
+<p>&nbsp;</p>
+<p># Overrides</p>
+<p>PRODUCT_NAME := full</p>
+<p>PRODUCT_BRAND := generic</p>
+<p>PRODUCT_DEVICE := generic</p>
+<p>PRODUCT_MODEL := Full Android</p>
+</div>
+<p>继承的full.mk文件内容比较多，我们将主要的一些变量列出如表x-x所示。</p>
+<table style="width: 800px;" border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top">
+<p align="center">变量名</p>
+</td>
+<td valign="top">
+<p align="center">作用</p>
+</td>
+<td valign="top">
+<p align="center">使用方式</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>PRODUCT_PACKAGES</p>
+</td>
+<td valign="top">
+<p>系统预置的模块列表，不仅仅只是Android应用程序，还可以包含库，可执行程序等</p>
+</td>
+<td valign="top">
+<p>直接将系统中要安装的模块名以空格隔开列出</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>PRODUCT_PROPERTY_OVERRIDES</p>
+</td>
+<td valign="top">
+<p>系统设置的属性值</p>
+</td>
+<td valign="top">
+<p>将所有预设的属性以空格隔开列出，属性格式为：key-value</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>PRODUCT_COPY_FILES</p>
+</td>
+<td valign="top">
+<p>要拷贝的文件</p>
+</td>
+<td valign="top">
+<p>将文件列表拷贝到文件系统中，文件格式为：源文件：目标文件</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>PRODUCT_NAME</p>
+</td>
+<td valign="top">
+<p>产品名</p>
+</td>
+<td valign="top">
+<p>该产品名要和编译项中产品名一致</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>PRODUCT_BRAND</p>
+</td>
+<td valign="top">
+<p>产品品牌</p>
+</td>
+<td valign="top">
+<p>&nbsp;</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>PRODUCT_DEVICE</p>
+</td>
+<td valign="top">
+<p>产品对应的设备名</p>
+</td>
+<td valign="top">
+<p>该名字要和产品设备主板配置文件（BoardConfig.mk）所在目录名一致</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>PRODUCT_MODEL</p>
+</td>
+<td valign="top">
+<p>&nbsp;</p>
+</td>
+<td valign="top">
+<p>&nbsp;</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>总结：我们自己定义的full_product产品继承了build/target/product/目录下的full.mk和languages_full.mk，full.mk文件是Android系统定义的一个&ldquo;通用产品&rdquo;，languages_full.mk文件是全部语言包配置文件，这样，自己的产品full_product就具有了通用产品的特点并且支持全部语言包。</p>
+<p>6.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定义目标产品对应的设备配置文件AndroidBoard.mk和BoardConfig.mk</p>
+<p>同样的道理，我们可以继承使用通用设备配置文件：build/target/board/generic/目录下的AndroidBoard.mk和BoardConfig.mk文件。</p>
+<p>&Oslash;&nbsp;创建AndroidBoard.mk和BoardConfig.mk文件</p>
+<div>
+<p>$ touch AndroidBoard.mk BoardConfig.mk</p>
+</div>
+<p>&Oslash;&nbsp;添加AndoridBoard.mk的内容如下：</p>
+<p>@ device/mycompany/myphone/AndroidBoard.mk</p>
+<div>
+<p>include build/target/board/generic/AndroidBoard.mk</p>
+</div>
+<p>&ldquo;继承&rdquo;的父AndroidBoard.mk，其内容：</p>
+<p>@build/target/board/generic/AndroidBoard.mk</p>
+<div>
+<p>LOCAL_PATH := $(call my-dir)</p>
+<p>&nbsp;</p>
+<p>file := $(TARGET_OUT_KEYLAYOUT)/tuttle2.kl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #&nbsp;<a class="replace_word" title="Linux知识库" href="http://lib.csdn.net/base/linux" target="_blank">Linux</a>内核按键码布局文件</p>
+<p>ALL_PREBUILT += $(file)</p>
+<p>$(file) : $(LOCAL_PATH)/tuttle2.kl | $(ACP)</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $(transform-prebuilt-to-target)</p>
+<p>&nbsp;</p>
+<p>include $(CLEAR_VARS)</p>
+<p>LOCAL_SRC_FILES := tuttle2.kcm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #&nbsp;Android按键码映射文件</p>
+<p>include $(BUILD_KEY_CHAR_MAP)</p>
+</div>
+<p>其实build/target/board/generic/AndroidBoard.mk文件里只是拷贝了按键映射文件和默认系统属性文件，我们可以将其内容直接拷贝到device/mycompany/myphone/AndroidBoard.mk中。</p>
+<p>&Oslash;&nbsp;添加BoardConfig.mk的内容如下：</p>
+<p>@ device/mycompany/myphone/BoardConfig.mk</p>
+<div>
+<p>includebuild/target/board/generic/BoardConfig.mk</p>
+</div>
+<p>&ldquo;继承&rdquo;的父BoardConfig.mk内容：</p>
+<p>@build/target/board/generic/BoardConfig.mk</p>
+<div>
+<p># config.mk</p>
+<p>#</p>
+<p># Product-specific compile-time definitions.</p>
+<p>#</p>
+<p>&nbsp;</p>
+<p># The generic product target doesn't have anyhardware-specific pieces.</p>
+<p>TARGET_NO_BOOTLOADER := true&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 当前设备是否没有Bootloader</p>
+<p>TARGET_NO_KERNEL := true&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 当前设备是否没有<a class="replace_word" title="Linux知识库" href="http://lib.csdn.net/base/linux" target="_blank">linux</a>内核</p>
+<p>TARGET_CPU_ABI := armeabi&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 当前设备支持的目标<a class="replace_word" title="大型网站架构知识库" href="http://lib.csdn.net/base/architecture" target="_blank">架构</a></p>
+<p>HAVE_HTC_AUDIO_DRIVER := true&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 是否使用HTC的音频驱动</p>
+<p>BOARD_USES_GENERIC_AUDIO := true&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 是否使用通用音频技术</p>
+<p>&nbsp;</p>
+<p># no hardware camera</p>
+<p>USE_CAMERA_STUB := true&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 是否使用摄像头Stub</p>
+</div>
+<p>通过BoardConfig.mk的信息可知，其实该文件就是定义了一些设备硬件相关的一些变量，这些变量用来裁剪系统的功能，决定Android系统可运行的体系构架。</p>
+<p>7.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据需要定义产品默认属性和键值信息</p>
+<p>Android系统的属性服务类似于Windows的注册表，记录着系统的一些设置信息，我们可以在新产品中预定义一些属性值来设置自己产品。在Android编译系统中，属性都保存在xxx.prop文件中，在build/target/board/generic/system.prop中定义了默认的属性，我们可以在它基础上进行修改。</p>
+<p>复制属性文件：</p>
+<div>
+<p>$ cp build/target/board/generic/system.prop&nbsp; device/mycompany/myphone/</p>
+</div>
+<p>在Android系统中，底层使用Linux内核来接收来自按键硬件上报的键值信息，上层处理用户按键的是Android的框架，二者之间通过两个键值布局文件来进行键值的映射。</p>
+<p>&Oslash;&nbsp;Keylayout文件：按键布局文件，以kl后缀命名，该文件用来定义按键驱动里上报的键值号（数字）和Linux内核中通过event事件上报的键值（字符）之间的映射关系。kl文件要放在/system/usr/keylayout/目录下或/data/usr/keylayout/目录下。</p>
+<p>&Oslash;&nbsp;KeyCharMap文件：键值字符映射文件，以kcm后缀命名，它用来将Linux内核上报来的键值（字符）进行转换，转换成Android系统里可以识别的键盘码或组合按键。kcm文件要放在/system/usr/keychars/目录下或/data/usr/keychars/目录下。</p>
+<p>上述两个按键映射文件使用按键驱动名作为其文件名，如果没有驱动名对应的布局文件，则使用/system/usr/keylayout/qwerty.kl和/system/usr/keychars/qwerty.kcm作为默认的按键映射文件。这两个文件名都通过AndroidBoard.mk文件负责拷贝和安装。</p>
+<p>如果我们要使用模拟器作为目标设备，只需要将源码build/target/board/generic/目录里的tuttole2.kl和tuttle2.kcm拷贝到AndroidBoard.mk所在的目录中即可。</p>
+<div>
+<p>$ cp build/target/board/generic/tuttle2.kl&nbsp; device/mycompany/myphone/tuttle2.kl</p>
+<p>$ cp build/target/board/generic/tuttle2.kcm&nbsp; device/mycompany/myphone/tuttle2.kcm&nbsp;</p>
+</div>
+<p>如果想要自定义系统的物理按键与Android系统的按键映射关系，则需要在tuttle2.kl和tuttle2.kcm的基础上进行修改，然后再修改AndroidBoard.mk的内容：</p>
+<div>
+<p>$ cp build/target/board/generic/tuttle2.kl&nbsp; device/mycompany/myphone/&lt;按键驱动名&gt;.kl</p>
+<p>$ cp build/target/board/generic/tuttle2.kcm&nbsp; device/mycompany/myphone/&lt;按键驱动名&gt;.kcm&nbsp;</p>
+</div>
+<p>修改device/mycompany/myphone/AndroidBoard.mk文件：</p>
+<div>
+<p>LOCAL_PATH := $(call my-dir)</p>
+<p>&nbsp;</p>
+<p>file := $(TARGET_OUT_KEYLAYOUT)/<strong>&lt;按键驱动名&gt;</strong>.kl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Linux内核按键码布局文件</p>
+<p>ALL_PREBUILT += $(file)</p>
+<p>$(file) : $(LOCAL_PATH)/<strong>&lt;按键驱动名&gt;</strong>.kl | $(ACP)</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $(transform-prebuilt-to-target)</p>
+<p>&nbsp;</p>
+<p>include $(CLEAR_VARS)</p>
+<p>LOCAL_SRC_FILES :=&nbsp;<strong>&lt;按键驱动名&gt;</strong>.kcm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #&nbsp; Android按键码映射文件</p>
+<p>include $(BUILD_KEY_CHAR_MAP)</p>
+</div>
+<p>注：kcm文件最终被编译系统的key_char_map.mk编译成xxx.kcm.bin的二进制形式，这是因为每个Android应用程序都要加载该按键映射文件，为了加快读取速度刻意而为之的。</p>
+<p>创建新产品编译项时创建的目录与文件结构如下：</p>
+<div>
+<p>device/mycompany/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 厂商目录</p>
+<p>└── vendorsetup.sh&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 添加编译项命令文件</p>
+<p>└── myphone/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 设备名目录</p>
+<p>├── AndroidBoard.mk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 设备属性和键值映射配置文件</p>
+<p>├── AndroidProducts.mk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 产品列表文件</p>
+<p>├── BoardConfig.mk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 设备硬件配置及目标架构配置文件</p>
+<p>├── full_product.mk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 目标产品配置文件</p>
+<p>├── system.prop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 系统默认属性配置文件</p>
+<p>├── tuttle2.kcm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Android系统键值映射文件</p>
+<p>├── tuttle2.kl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Linux内核按键布局文件</p>
+</div>
+<p>确认上述目录和文件创建没有问题了，执行Android编译步骤：sourcebuild/envsetup.sh，lunch选择myproduct-eng编译项。</p>
+<p>如果看到如下信息，说明我们已经添加新产品成功。</p>
+<div>
+<p>============================================</p>
+<p>PLATFORM_VERSION_CODENAME=REL</p>
+<p>PLATFORM_VERSION=2.3.6</p>
+<p>TARGET_PRODUCT=<strong>myproduct</strong></p>
+<p>TARGET_BUILD_VARIANT=<strong>eng</strong></p>
+<p>TARGET_SIMULATOR=false</p>
+<p>TARGET_BUILD_TYPE=release</p>
+<p>TARGET_BUILD_APPS=</p>
+<p>TARGET_ARCH=arm</p>
+<p>HOST_ARCH=x86</p>
+<p>HOST_OS=linux</p>
+<p>HOST_BUILD_TYPE=release</p>
+<p>BUILD_ID=GRK39F</p>
+<p>============================================</p>
+</div>
+<p>8.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;常见问题</p>
+<p>&Oslash;&nbsp;问题1： lunch菜单里没有出现myproduct编译项</p>
+<p>原因及解决方法：在执行lunch之前，要执行source build/envsetup.sh命令，确认vendorsetup.sh文件存在及其内容正确无误。</p>
+<p>&Oslash;&nbsp;问题2：选择完lunch菜单里的编译项后，出错：</p>
+<p>*** No matches for product"myproduct".&nbsp; Stop.</p>
+<p>** Don't have a product spec for:'myproduct'</p>
+<p>** Do you have the right repo manifest?</p>
+<p>原因及解决方法：编译系统找不到用户选择的编译项里的myproduct产品，确认AndroidProducts.mk文件里列出了myproduct产品的配置文件full_product.mk，并且full_product.mk文件中PRODUCT_NAME变量的值为产品名：myproduct</p>
+<p>&Oslash;&nbsp;问题3：选择完lunch菜单里的编译项后，出错：</p>
+<p>*** No config file found for TARGET_DEVICEmyphone.&nbsp; Stop.</p>
+<p>** Don't have a product spec for:'myproduct'</p>
+<p>** Do you have the right repo manifest?</p>
+<p>原因及解决方法：编译系统找不到myproduct产品对应的设备myphone，确认myproduct产品的配置文件full_product.mk中PRODUCT_DEVICE变量的值为产品名：myphone，并且在device/mycompany/目录下创建了myphone的设备目录，在该目录下存在BoardConfig.mk文件。</p>
+<h3><a name="t2" target="_blank"></a><a name="_Toc23287" target="_blank"></a>4.3.2&nbsp;定制产品的意义及定制要点</h3>
+<p>Android系统是一个完全开源的系统，我们可以通过修改Linux内核代码和Android源码，定制具有独特创意的产品系统，对于产品同质化非常严重的移动市场， Android系统的细节个性化定制也可以让用户眼前一亮。另外，一些产品明确要求要修改或增加一些个性化，如：默认的Android系统开机界面是一个黄嘴的小企鹅，在Android系统启动过程中是一个ANDROID字样的动画效果，厂商一般都要求自己产品开机界面是厂商Logo，开机动画是一个能动态、鲜明表现公司活力的动画效果，我们从本节开始介绍定制产品系统的实现技术。</p>
+<p>在整个开机过程中，屏幕上会出现三次内容，如图x-x 所示：</p>
+<p>&Oslash;&nbsp; Linux启动时画面，通常是个黄嘴的小企鹅</p>
+<p>&Oslash;&nbsp; Android系统init进程启动阶段画面，是&ldquo;ANDROID&rdquo;文字字样</p>
+<p>&Oslash;&nbsp; Android系统启动阶段动画，是滚动的ANDROID动画</p>
+<p><img src="http://img.blog.csdn.net/20140611215430203?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbXJfcmFwdG9y/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="" /></p>
+<p align="center">&nbsp;</p>
+<p align="center">图 x-x 开机界面与Android动画</p>
+<p>&nbsp;</p>
+<h3><a name="t3" target="_blank"></a>定制系统开机动画</h3>
+<p>&nbsp;</p>
+<p><strong>【实验背景知识】</strong></p>
+<p>Android的开机动画是由Linux本地守护程序bootanimation专门控制实现的，其代码在：frameworks/base/cmds/bootanimation/目录下，修改Android开机动画有两种方式：</p>
+<p>&Oslash;&nbsp;蒙板图片替换：</p>
+<p>替换frameworks/base/core/res/assets/images/目录下的两个图片文件：android-logo-mask.png和android-logo-shine.png。android-logo-mask.png是镂空蒙板图片，android-logo-shine.png是镂空蒙板后面的闪光png图片。两个图片通过叠加移动来达到动画效果。</p>
+<p>&Oslash;&nbsp;逐帧动画替换：</p>
+<p>在/data/local/或/system/media/目录创建bootanimation.zip文件，该压缩包文件里存放有逐帧动画及控制脚本。</p>
+<p><strong>【实验组成】</strong></p>
+<p>本实验分为两部分：蒙板图片替换实验和逐帧动画替换实验。</p>
+<p><strong>【实验内容】</strong></p>
+<p>分析Android系统的两种开机动画实现方式，制作并替换开机动画，最终在Android模拟器中运行定制开机动画的系统。</p>
+<p><strong>【实验目的】</strong></p>
+<p>通过实验，了解Android系统的两种开机动画实现方式，掌握如何定制产品的开机动画，并在Android模拟器中，运行定制开机动画的Android系统。</p>
+<p><strong>【实验平台】</strong></p>
+<p>拥有Android源码编译环境的Ubuntu<a class="replace_word" title="操作系统知识库" href="http://lib.csdn.net/base/operatingsystem" target="_blank">操作系统</a>（可以在Windows系统中虚拟Ubuntu系统）。</p>
+<p><strong>【蒙板图片替换实验步骤】</strong></p>
+<p>1.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 使用PhotoShop等图像处理软件制作一张背景为黑色，中间镂空的png格式的图片，命名为：android-logo-mask.png，如图x-x所示。</p>
+<p><img src="http://img.blog.csdn.net/20140611215757203?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbXJfcmFwdG9y/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="" /></p>
+<p align="center">&nbsp;</p>
+<p>图x-x 制作镂空动画</p>
+<p>2.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将android-logo-mask.png拷贝到frameworks/base/core/res/assets/images/目录下替换Android默认的图片，为了防止源码不编译图片资源，将图片时间戳更新一下。</p>
+<div>
+<p>$ cp android-logo-mask.png&nbsp;&nbsp;&nbsp; ~/android/android_source/frameworks/base/core/res/assets/images/</p>
+<p>$ touch ~/android/android_source/frameworks/base/core/res/assets/images/android-logo-mask.png</p>
+</div>
+<p>3.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;重新编译Android的系统资源包framework-res.apk</p>
+<div>
+<p>$ source build/envsetup.sh</p>
+<p>$ lunch generic-eng</p>
+<p>$ mmm frameworks/base/core/res/</p>
+</div>
+<p>4.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;生成新的system.img</p>
+<div>
+<p>$ make snod</p>
+</div>
+<p>5.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;启动Android模拟器，实验效果如图x-x所示。</p>
+<div>
+<p>$ ./run_emulator.sh</p>
+</div>
+<p align="center"><img src="http://img.blog.csdn.net/20140611215823531?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbXJfcmFwdG9y/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="" />&nbsp;</p>
+<p align="center">&nbsp;</p>
+<p>图x-x 定制开机动画效果</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong>【逐帧动画替换实验步骤】</strong></p>
+<p>1.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在/data/local/或/system/media/目录创建bootanimation.zip文件</p>
+<p>如果放在/data/local目录下，不需要编译Android源码，直接通过adb命令或文件管理软件拷贝到目录下即可，如果集成进Android系统中，则需要放在/system/media/目录下，这时要重新编译生成system.img映像。</p>
+<p>bootanimation.zip文件是直接由几个文件打包生成的，打包的格式是ZIP，打包时的压缩方式选择为存储。</p>
+<p>&nbsp;</p>
+<p><img src="http://img.blog.csdn.net/20140611215847609?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbXJfcmFwdG9y/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="" /></p>
+<p>图x-x 压缩文件方式</p>
+<p>&nbsp;</p>
+<p>bootanimation.zip文件打包前的结构为：</p>
+<p>表x-x bootanimation.zip压缩包文件结构</p>
+<div align="center">
+<table style="width: 800px;" border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top">
+<p><strong>文件</strong></p>
+</td>
+<td valign="top">
+<p><strong>说明</strong></p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>desc.txt</p>
+</td>
+<td valign="top">
+<p>动画属性描述文件</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>part0/</p>
+</td>
+<td valign="top">
+<p>第一阶段动画图片的目录</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>part1/</p>
+</td>
+<td valign="top">
+<p>第二阶段动画图片的目录</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>其中part0和part1中的动画图片类似于电影胶片，两张图片之间变化较小，他们以固定的速度显示，从而产生动画效果，图片的大小和图片显示的时间控制由desc.txt文件说明。</p>
+<p>desc.txt文件内容为：</p>
+<div>
+<p>480 250 15</p>
+<p>p 1 0 part0</p>
+<p>p 0 10 part1</p>
+</div>
+<p>desc.txt文件的格式为：</p>
+<div align="center">
+<table style="width: 800px;" border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top">
+<p align="center"><strong>&nbsp;</strong></p>
+</td>
+<td colspan="4" valign="top" width="468">
+<p align="center"><strong>数据及说明</strong></p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><strong>图片属性</strong></p>
+</td>
+<td valign="top">
+<p>320（图片宽）</p>
+</td>
+<td valign="top">
+<p>320（图片高）</p>
+</td>
+<td valign="top">
+<p>15（每秒显示帧数）</p>
+</td>
+<td valign="top">
+<p>无</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><strong>第一阶段动画属性</strong></p>
+</td>
+<td valign="top">
+<p>P（默写标志符）</p>
+</td>
+<td valign="top">
+<p>1（循环次数为1 ）</p>
+</td>
+<td valign="top">
+<p>0（进入该阶段的间隔时间）</p>
+</td>
+<td valign="top">
+<p>part0（该阶段图片存放目录）</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><strong>第二阶段动画属性</strong></p>
+</td>
+<td valign="top">
+<p>p（默写标志符）</p>
+</td>
+<td valign="top">
+<p>0（无限循环）</p>
+</td>
+<td valign="top">
+<p>10（进入该阶段的间隔时间）</p>
+</td>
+<td valign="top">
+<p>part1（该阶段图片存放目录）</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>注：</p>
+<p>标识符：p&nbsp;是必须的。</p>
+<p>循环次数：指该目录中图片循环显示的次数，0表示本阶段无限循环。</p>
+<p>每秒显示帧数：就是每秒显示的图片数量，决定每张图片显示的时间。</p>
+<p>阶段切换间隔时间：指的是该阶段结束后间隔多长时间显示下一阶段的图片，其单位是每张图片显示的时间。</p>
+<p>对应图片目录：就是该阶段动画的系列图片，以图片文件目录的顺序显示动画，而且图片的格式必须要为PNG。</p>
+<p>由于逐帧动画不太方便制做，我们直接使用光盘中：章节实验/第四章定制系统开机动画/bootanimation.zip文件作为演示。</p>
+<p>2.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果bootanimation.zip放到/system/media/目录下，则重新编译生成system.img</p>
+<div>
+<p>$ source build/envsetup.sh</p>
+<p>$ lunch generic-eng</p>
+<p>$ make snod</p>
+</div>
+<p>3.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;启动Android模拟器，查看动画效果，如图x-x和x-x所示。</p>
+<div>
+<p>$ ./run_emulator.sh</p>
+</div>
+<p align="center"><img src="http://img.blog.csdn.net/20140611220020390?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbXJfcmFwdG9y/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="" />&nbsp;</p>
+<p align="center">&nbsp;</p>
+<p>图x-x 第一阶段开机动画</p>
+<p>&nbsp;<img src="http://img.blog.csdn.net/20140611220029953?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbXJfcmFwdG9y/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="" /></p>
+<p align="center">&nbsp;</p>
+<p>图x-x 第二阶段开机动画</p>
+<p>结论：通过实验看出，当我们使用逐帧动画时，蒙板动画就不播放了，这是因为Android系统只能使用一种启动动画方式，先判断是否使用了逐帧动画，如果没有使用逐帧动画时，才使用默认的蒙板动画。</p>
+<p>&nbsp;</p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory"></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info">
+</div>
+<div class="clear"></div>
+<div id="post_next_prev"></div>
+</div>
+
+
+		</div>
+		<div class = "postDesc">posted @ <span id="post-date">2017-07-14 20:39</span> <a href='http://www.cnblogs.com/zzb-Dream-90Time/'>爱做梦的90后</a> 阅读(<span id="post_view_count">...</span>) 评论(<span id="post_comment_count">...</span>)  <a href ="https://i.cnblogs.com/EditPosts.aspx?postid=7172167" rel="nofollow">编辑</a> <a href="#" onclick="AddToWz(7172167);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=280408,cb_entryId=7172167,cb_blogApp=currentBlogApp,cb_blogUserGuid='8303c184-0805-e611-9fc1-ac853d9f53cc',cb_entryCreatedDate='2017/7/14 20:39:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id='comment_form' class='commentform'>
+<a name='commentform'></a>
+<div id='divCommentShow'></div>
+<div id='comment_nav'><span id='span_refresh_tips'></span><a href='javascript:void(0);' onclick='return RefreshCommentList();' id='lnk_RefreshComments' runat='server' clientidmode='Static'>刷新评论</a><a href='#' onclick='return RefreshPage();'>刷新页面</a><a href='#top'>返回顶部</a></div>
+<div id='comment_form_container'></div>
+<div class='ad_text_commentbox' id='ad_text_under_commentbox'></div>
+<div id='ad_t2'></div>
+<div id='opt_under_post'></div>
+<div id='cnblogs_c1' class='c_ad_block'></div>
+<div id='under_post_news'></div>
+<div id='cnblogs_c2' class='c_ad_block'></div>
+<div id='under_post_kb'></div>
+<div id='HistoryToday' class='c_ad_block'></div>
+<script type='text/javascript'>
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="calendar"><div id="blog-calendar" style="display:none"></div><script type="text/javascript">loadBlogDefaultCalendar();</script></div>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright &copy;2018 学习博客
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
 </body>
 </html>
+
